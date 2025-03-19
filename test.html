@@ -1,0 +1,145 @@
+<html lang="en">
+    <body> 
+        <style>
+
+            .menu-wrapper {
+        
+            width: 300px;
+        
+            overflow: hidden;
+        
+            }
+        
+            
+        
+            .menu {
+        
+            display: flex;
+        
+            white-space: nowrap;
+        
+            transition: transform .5s ease;
+        
+            }
+        
+            
+        
+            .menu-item {
+        
+            margin-right: 20px;
+        
+            flex-shrink: 0;
+        
+            }
+        
+        </style>
+        
+        <div class="menu-wrapper">
+        
+            <button id="prevButton" onclick="moveMenu('prev')">Prev</button>
+        
+            <div id="menu" class="menu">
+        
+            <span class="menu-item">Some longer text</span>
+        
+            <span class="menu-item">Text</span>
+        
+            <span class="menu-item">Some text</span>
+        
+            <span class="menu-item">Some text</span>
+        
+            <span class="menu-item">Longer text</span>
+        
+            <span class="menu-item">Some longer text</span>
+        
+            <span class="menu-item">Text</span>
+        
+            <span class="menu-item">Some text</span>
+        
+            </div>
+        
+            <button id="nextButton" onclick="moveMenu('next')">Next</button>
+        
+        </div>
+        
+        <script>
+        
+            var menu = document.getElementById('menu');
+        
+            const { children } = menu
+        
+            let currentIndex = 0
+        
+            const positionMap = [{position: 0}]
+        
+            let sum = 0
+        
+            let position = 0
+        
+            for (const index in children) {
+        
+            const menuItem = children[index]
+        
+            const {
+        
+                offsetWidth
+        
+            } = menuItem
+        
+            sum -= offsetWidth + 20
+        
+            if (sum < -300 || index === children.length - 1) {
+        
+                menuItem.style.opacity = 0
+        
+                positionMap[positionMap.length - 1].hideIndex = index
+        
+                position += sum + offsetWidth + 20
+        
+                positionMap.push({
+        
+                position: position
+        
+                })
+        
+                sum = -offsetWidth - 20
+        
+            }
+        
+            }
+        
+            function moveMenu(direction) {
+        
+            setOpacity(1)
+        
+            if (direction === 'next') {
+        
+                if (currentIndex >= (positionMap.length - 1)) return
+        
+                currentIndex++
+        
+            } else {
+        
+                if (currentIndex <= 0) return
+        
+                currentIndex--
+        
+            }
+        
+            setOpacity(0)
+        
+            menu.style.transform = `translateX(${positionMap[currentIndex].position}px)`;
+        
+            }
+        
+            function setOpacity(val) {
+        
+            const item = children[positionMap[currentIndex].hideIndex]
+        
+            if (item) item.style.opacity = val
+        
+            }
+        
+        </script>
+    </body>
+</html>
